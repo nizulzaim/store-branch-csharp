@@ -1,0 +1,83 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Manager.master.cs" Inherits="StoreBranchApp.Manager" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+    <link href="/ui/semantic.css?v=1.1" rel="stylesheet" />
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <div class="ui left inverted vertical menu scale down sidebar">
+        <div class="item">
+            <div class="ui logo icon image" style="max-width: 40px; margin-right: 8px;">
+                <img src="/assets/img/logo.png" />
+            </div>
+            <b>Simple Store</b><br />
+            <div style="margin-top: 10px;">
+                <b>
+                    <%  int loginId = StoreBranchApp.MySession.Current.LoginId;
+
+                        if (loginId == 0)
+                        {
+                            Response.Redirect("/index.aspx");
+                        }
+                        StoreBranchApp.User user = StoreBranchApp.User.findOne(loginId);
+                    %>
+                    <%=
+					user.Username
+                    %> (<%=
+					user.type().Name
+                    %>)
+                </b>
+            </div>
+        </div>
+        <a class="item" href="/dashboard/manager/index.aspx">Dashboard Home
+        </a>
+        <a class="item" href="/dashboard/manager/stockList.aspx">Manage Stock
+        </a>
+        <a class="item" href="/dashboard/manager/transactionList.aspx">Manage Transaction
+        </a>
+        <a class="item" href="/logout.aspx">Logout
+        </a>
+    </div>
+
+    <div class="pusher">
+        <div class="ui inverted menu">
+            <div class="ui container">
+                <div class="item">
+                    <button class="ui large green labeled icon button" id="menu-button">
+                        <i class="sidebar icon"></i>
+                        SimpleStore
+                    </button>
+                </div>
+            </div>
+        </div>
+        <asp:ContentPlaceHolder ID="content" runat="server">
+        </asp:ContentPlaceHolder>
+    </div>
+    
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/ui/semantic.min.js"></script>
+
+    <script>
+        $("#menu-button").on("click", function (e) {
+            e.preventDefault();
+            $('.ui.sidebar').sidebar('toggle')
+            ;
+        });
+    </script>
+
+    <script>
+        $("#addButton").on("click", function (e) {
+            e.preventDefault();
+            $('.ui.modal').modal({
+                detachable: false
+            }).modal('setting', 'transition', "vertical flip").modal('show');
+        });
+    </script>
+</body>
+</html>
+
